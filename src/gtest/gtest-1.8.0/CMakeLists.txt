@@ -27,7 +27,7 @@ endif()
 # ${gtest_BINARY_DIR}.
 # Language "C" is required for find_package(Threads).
 project(gtest CXX C)
-cmake_minimum_required(VERSION 2.6.4)
+cmake_minimum_required(VERSION 2.6...4.2)
 
 # Where gtest's .h files can be found.
 include_directories(
