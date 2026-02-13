@@ -69,6 +69,7 @@ jobs:
                         -DBUILD_SHARED_LIBS=ON \
                         -DENABLE_BLASLAPACK=OFF \
                         -DENABLE_FORTRAN=OFF \
+                        -DCMAKE_C_BYTE_ORDER=LITTLE_ENDIAN \
                         -DCMAKE_INSTALL_PREFIX=${HOME}/moab
           make
           make install
