@@ -72,10 +72,9 @@ jobs:
           cmake \
               -DCMAKE_INSTALL_PREFIX=${HOME}/moab \
               -DHAVE_WORDS_BIGENDIAN=TRUE \
-              -DEIGEN3_DIR="$(brew --prefix)/include/eigen3" \
+              -DCMAKE_PREFIX_PATH="$(brew --prefix)" \
               -DENABLE_HDF5=ON \
               -DENABLE_PYMOAB=OFF \
-              -DHDF5_ROOT=$HDF5_PATH \
               -DBUILD_SHARED_LIBS=ON \
               -DENABLE_BLASLAPACK=OFF \
               -DENABLE_FORTRAN=OFF \
