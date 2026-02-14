@@ -38,7 +38,8 @@ env:
 
 jobs:
   BuildTest:
-    runs-on: macos-latest
+    # runs-on: macos-latest
+    runs-on: macos-15-intel
 
     steps:
       - uses: actions/checkout@v3
@@ -48,6 +49,8 @@ jobs:
         run: |
           brew install eigen hdf5
           brew search cmake
+          brew tap-info homebrew/core
+          ls $(brew --repo homebrew/core)/Formula/c/cmake*
           brew install cmake@3.31.0
           echo "$(brew --prefix cmake@3.31.0)/bin" >> $GITHUB_PATH
 
