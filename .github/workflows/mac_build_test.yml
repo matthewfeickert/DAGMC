@@ -58,15 +58,20 @@ jobs:
       - name: Build MOAB
         shell: bash -l {0}
         run: |
-          echo "ls $(brew --prefix)/include/eigen3"
-          ls -lhtra "$(brew --prefix)/include/eigen3/*"
+          echo "ls $(brew --prefix)/include/*"
+          ls -lhtra "$(brew --prefix)/include/*"
 
           cd ${HOME}
           mkdir -pv moab
           git clone -b 5.5.1 --depth 1 --shallow-submodules https://bitbucket.org/fathomteam/moab moab_src
-          rm moab_src/config/TestBigEndian.cmake
+          # CMake 4.x fixed a typo: TestEndianess.c.in was renamed to TestEndianness.c.in.
+          # MOAB v5.5.1 ships a custom config/TestBigEndian.cmake that hardcodes the old
+          # misspelled filename, and because config/ is first in CMAKE_MODULE_PATH, it
+          # shadows CMake's built-in (working) module.
+          # Avoid this by setting HAVE_WORDS_BIGENDIAN=TRUE
           cmake \
               -DCMAKE_INSTALL_PREFIX=${HOME}/moab \
+              -DHAVE_WORDS_BIGENDIAN=TRUE \
               -DEIGEN3_DIR="$(brew --prefix)/include/eigen3" \
               -DENABLE_HDF5=ON \
               -DENABLE_PYMOAB=OFF \
