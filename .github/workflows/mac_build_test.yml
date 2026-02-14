@@ -91,20 +91,24 @@ jobs:
       - name: Build DAGMC
         shell: bash -l {0}
         run: |
-          mkdir -p $GITHUB_WORKSPACE/bld
-          cd $GITHUB_WORKSPACE/bld
-          cmake ../ -DMOAB_DIR=${HOME}/moab \
-                    -DBUILD_CI_TESTS=ON \
-                    -DBUILD_STATIC_EXE=OFF \
-                    -DBUILD_SHARED_LIBS=ON \
-                    -DBUILD_STATIC_LIBS=OFF \
-                    -DCMAKE_CXX_FLAGS="-Werror=reorder" \
-                    -DCMAKE_INSTALL_PREFIX=${HOME}/dagmc
-          make
-          make install
+          cmake \
+            -DCMAKE_INSTALL_PREFIX=${HOME}/dagmc \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix)" \
+            -DEIGEN3_DIR="${EIGEN3_DIR}" \
+            -DMOAB_DIR=${HOME}/moab \
+            -DBUILD_CI_TESTS=ON \
+            -DBUILD_STATIC_EXE=OFF \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBUILD_STATIC_LIBS=OFF \
+            -DCMAKE_CXX_FLAGS="-Werror=reorder" \
+            -S . \
+            -B $GITHUB_WORKSPACE/build
+          cmake -LH build
+          cmake --build build --parallel
+          cmake --install build
 
       - name: Testing DAGMC
         shell: bash -l {0}
         run: |
-          cd $GITHUB_WORKSPACE/bld
-          PATH=$GITHUB_WORKSPACE/bld/bin:$PATH make test
+          cd $GITHUB_WORKSPACE/build
+          PATH=$GITHUB_WORKSPACE/build/bin:$PATH make test
