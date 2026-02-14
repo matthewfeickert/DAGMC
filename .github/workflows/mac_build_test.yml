@@ -50,9 +50,13 @@ jobs:
           brew install hdf5
           # Homebrew now ships Eigen 5.x, which is incompatible with MOAB 5.5.1's
           # FindEigen3.cmake (can't parse version) and likely its API usage.
-          # Use Eigen 3.4.0 directly instead (header-only, no build needed).
+          # Install Eigen 3.4.0 from source instead (header-only, so install is fast).
+          # A proper cmake install is needed so that Eigen3Config.cmake is generated
+          # for DAGMC's find_package(Eigen3 REQUIRED NO_MODULE).
           curl -sL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj -C /tmp
-          echo "EIGEN3_DIR=/tmp/eigen-3.4.0" >> $GITHUB_ENV
+          cmake -S /tmp/eigen-3.4.0 -B /tmp/eigen-build -DCMAKE_INSTALL_PREFIX=/tmp/eigen
+          cmake --install /tmp/eigen-build
+          echo "EIGEN_PREFIX=/tmp/eigen" >> $GITHUB_ENV
 
       - name: Environment Variables
         shell: bash -l {0}
@@ -75,7 +79,7 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=${HOME}/moab \
               -DHAVE_WORDS_BIGENDIAN=TRUE \
               -DCMAKE_PREFIX_PATH="$(brew --prefix)" \
-              -DEIGEN3_DIR="${EIGEN3_DIR}" \
+              -DEIGEN3_DIR="${EIGEN_PREFIX}/include/eigen3" \
               -DENABLE_HDF5=ON \
               -DENABLE_PYMOAB=OFF \
               -DBUILD_SHARED_LIBS=ON \
@@ -93,8 +97,7 @@ jobs:
         run: |
           cmake \
             -DCMAKE_INSTALL_PREFIX=${HOME}/dagmc \
-            -DCMAKE_PREFIX_PATH="$(brew --prefix)" \
-            -DEIGEN3_DIR="${EIGEN3_DIR}" \
+            -DCMAKE_PREFIX_PATH="${EIGEN_PREFIX};$(brew --prefix)" \
             -DMOAB_DIR=${HOME}/moab \
             -DBUILD_CI_TESTS=ON \
             -DBUILD_STATIC_EXE=OFF \
