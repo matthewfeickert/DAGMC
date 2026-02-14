@@ -59,7 +59,7 @@ jobs:
         shell: bash -l {0}
         run: |
           echo "ls $(brew --prefix)/include/eigen3"
-          ls -lhtra "$(brew --prefix)/include/eigen3"
+          ls -lhtra "$(brew --prefix)/include/eigen3/*"
 
           cd ${HOME}
           mkdir -pv moab
