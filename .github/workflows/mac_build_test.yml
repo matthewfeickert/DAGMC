@@ -61,7 +61,7 @@ jobs:
         with:
           run-install: false
           global-environments: |
-            cmake
+            'cmake < 4.0'
 
       - name: Install cmake
         run: |
@@ -78,8 +78,6 @@ jobs:
       - name: Build MOAB
         shell: bash -l {0}
         run: |
-          command -v cmake
-          cmake --version
           cd ${HOME}
           mkdir -pv moab/bld
           cd moab
