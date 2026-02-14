@@ -61,7 +61,7 @@ jobs:
         with:
           run-install: false
           global-environments: |
-            'cmake < 4.0'
+            cmake < 4.0
 
       - name: Install cmake
         run: |
