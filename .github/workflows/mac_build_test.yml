@@ -58,9 +58,6 @@ jobs:
       - name: Build MOAB
         shell: bash -l {0}
         run: |
-          echo "ls $(brew --prefix)/include/*"
-          ls -lhtra "$(brew --prefix)/include/*"
-
           cd ${HOME}
           mkdir -pv moab
           git clone -b 5.5.1 --depth 1 --shallow-submodules https://bitbucket.org/fathomteam/moab moab_src
