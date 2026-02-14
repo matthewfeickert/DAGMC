@@ -1,5 +1,5 @@
-project(DAGMC)
 cmake_minimum_required(VERSION 3.18...4.2)
+project(DAGMC)
 enable_language(CXX)
 
 # Set DAGMC version
