@@ -86,11 +86,11 @@ jobs:
               -DENABLE_BLASLAPACK=OFF \
               -DENABLE_FORTRAN=OFF \
               -S moab_src \
-              -B build
-          cmake -LH build
-          cmake --build build --parallel
-          cmake --install build
-          rm -rf moab_src build lib
+              -B bld
+          cmake -LH bld
+          cmake --build bld --parallel
+          cmake --install bld
+          rm -rf moab_src bld lib
 
       - name: Build DAGMC
         shell: bash -l {0}
@@ -105,13 +105,13 @@ jobs:
             -DBUILD_STATIC_LIBS=OFF \
             -DCMAKE_CXX_FLAGS="-Werror=reorder" \
             -S . \
-            -B $GITHUB_WORKSPACE/build
-          cmake -LH build
-          cmake --build build --parallel
-          cmake --install build
+            -B $GITHUB_WORKSPACE/bld
+          cmake -LH bld
+          cmake --build bld --parallel
+          cmake --install bld
 
       - name: Testing DAGMC
         shell: bash -l {0}
         run: |
-          cd $GITHUB_WORKSPACE/build
-          PATH=$GITHUB_WORKSPACE/build/bin:$PATH make test
+          cd $GITHUB_WORKSPACE/bld
+          PATH=$GITHUB_WORKSPACE/bld/bin:$PATH make test
