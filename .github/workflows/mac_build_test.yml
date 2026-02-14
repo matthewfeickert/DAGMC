@@ -47,7 +47,12 @@ jobs:
       - name: Initial setup
         shell: bash -l {0}
         run: |
-          brew install eigen hdf5
+          brew install hdf5
+          # Homebrew now ships Eigen 5.x, which is incompatible with MOAB 5.5.1's
+          # FindEigen3.cmake (can't parse version) and likely its API usage.
+          # Use Eigen 3.4.0 directly instead (header-only, no build needed).
+          curl -sL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj -C /tmp
+          echo "EIGEN3_DIR=/tmp/eigen-3.4.0" >> $GITHUB_ENV
 
       - name: Environment Variables
         shell: bash -l {0}
@@ -70,6 +75,7 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=${HOME}/moab \
               -DHAVE_WORDS_BIGENDIAN=TRUE \
               -DCMAKE_PREFIX_PATH="$(brew --prefix)" \
+              -DEIGEN3_DIR="${EIGEN3_DIR}" \
               -DENABLE_HDF5=ON \
               -DENABLE_PYMOAB=OFF \
               -DBUILD_SHARED_LIBS=ON \
