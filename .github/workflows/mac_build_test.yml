@@ -107,10 +107,8 @@ jobs:
             -S . \
             -B $GITHUB_WORKSPACE/build
           cmake -LH build
-          cd $GITHUB_WORKSPACE/build
-          # cmake failing with "no rule to make target `Makefile'."
-          make
-          make install
+          cmake --build build --parallel
+          cmake --install build
 
       - name: Testing DAGMC
         shell: bash -l {0}
