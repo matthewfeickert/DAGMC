@@ -83,7 +83,7 @@ jobs:
           cmake -LH build
           cmake --build build --parallel
           cmake --install build
-          rm -rf moab_src build
+          rm -rf moab_src build lib
 
       - name: Build DAGMC
         shell: bash -l {0}
